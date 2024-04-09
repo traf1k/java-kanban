@@ -1,25 +1,24 @@
+import manager.TaskManager;
+import model.Epic;
+import model.Status;
+import model.SubTask;
+import model.Task;
+
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Трекер задач на каждый день!");
+
         TaskManager taskManager = new TaskManager();
 
-        Task task1 = new Task("Задача 1", "Описание задачи 1", Status.NEW, 0);
-        Task task2 = new Task("Задача 2", "Описание задачи 2", Status.NEW, 0);
-        taskManager.createTask(task1);
-        taskManager.createTask(task2);
+        Task task1 = taskManager.createTask("Задача 1", "Описание задачи 1", Status.NEW);
+        Task task2 = taskManager.createTask("Задача 2", "Описание задачи 2", Status.NEW);
 
-        Epic epic1 = new Epic("Эпик 1", "Описание эпика 1", Status.NEW, 0);
-        taskManager.createEpic(epic1);
-        SubTask subTask1 = new SubTask("Подзадача 1", "Описание подзадачи 1", Status.NEW, 0, epic1.getId());
-        taskManager.createSubtask(subTask1);
-        SubTask subTask2 = new SubTask("Подзадача 2", "Описание подзадача 2", Status.NEW, 0, epic1.getId());
-        taskManager.createSubtask(subTask2);
+        Epic epic1 = taskManager.createEpic("Эпик 1", "Описание эпика 1", Status.NEW);
+        SubTask subTask1 = taskManager.createSubtask("Подзадача 1", "Описание подзадачи 1", Status.NEW, epic1.getId());
+        SubTask subTask2 = taskManager.createSubtask("Подзадача 2", "Описание подзадачи 2", Status.NEW, epic1.getId());
 
-        Epic epic2 = new Epic("Эпик 2", "Описание эпика 2", Status.NEW, 0);
-        taskManager.createEpic(epic2);
-        SubTask subTask3 = new SubTask("Подзадача 3", "Описание подзадачи 3", Status.NEW, 0, epic2.getId());
-        taskManager.createSubtask(subTask3);
+        Epic epic2 = taskManager.createEpic("Эпик 2", "Описание эпика 2", Status.NEW);
+        SubTask subTask3 = taskManager.createSubtask("Подзадача 3", "Описание подзадачи 3", Status.NEW, epic2.getId());
 
         System.out.println("Список эпиков:");
         for (Epic epic : taskManager.getEpicList()) {
@@ -41,9 +40,9 @@ public class Main {
             System.out.println(subTask.getName());
         }
 
-        Epic epic = taskManager.getEpicById(epic1.getId());
-        if (epic != null) {
-            System.out.println("Статус эпика 1: " + epic.getStatus());
+        Epic createdEpic = taskManager.getEpicById(epic1.getId());
+        if (createdEpic != null) {
+            System.out.println("Статус эпика 1: " + createdEpic.getStatus());
         } else {
             System.out.println("Эпик не найден.");
         }
@@ -58,9 +57,9 @@ public class Main {
 
         System.out.println("Статус после его изменения:");
 
-        Epic createdEpic = taskManager.getEpicById(epic1.getId());
-        if (createdEpic != null) {
-            System.out.println("Статус эпика 1: " + createdEpic.getStatus());
+        Epic updatedEpic = taskManager.getEpicById(epic1.getId());
+        if (updatedEpic != null) {
+            System.out.println("Статус эпика 1: " + updatedEpic.getStatus());
         } else {
             System.out.println("Эпик не найден.");
         }
@@ -82,7 +81,6 @@ public class Main {
         System.out.println("Список подзадач для эпика 1 после удаления подзадачи 1:");
         for (SubTask subtask : taskManager.getSubTasksEpicsIds(epic1.getId())) {
             System.out.println(subtask.getName());
-            System.out.println();
         }
     }
 }
