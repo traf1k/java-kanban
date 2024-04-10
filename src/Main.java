@@ -7,18 +7,25 @@ import model.Task;
 public class Main {
 
     public static void main(String[] args) {
-
         TaskManager taskManager = new TaskManager();
 
-        Task task1 = taskManager.createTask("Задача 1", "Описание задачи 1", Status.NEW);
-        Task task2 = taskManager.createTask("Задача 2", "Описание задачи 2", Status.NEW);
+        Task task1 = new Task("Задача 1", "Описание задачи 1", Status.NEW, 0);
+        Task task2 = new Task("Задача 2", "Описание задачи 2", Status.NEW, 0);
+        taskManager.createTask(task1);
+        taskManager.createTask(task2);
 
-        Epic epic1 = taskManager.createEpic("Эпик 1", "Описание эпика 1", Status.NEW);
-        SubTask subTask1 = taskManager.createSubtask("Подзадача 1", "Описание подзадачи 1", Status.NEW, epic1.getId());
-        SubTask subTask2 = taskManager.createSubtask("Подзадача 2", "Описание подзадачи 2", Status.NEW, epic1.getId());
+        Epic epic1 = new Epic("Эпик 1", "Описание эпика 1", Status.NEW, 0);
+        taskManager.createEpic(epic1);
+        SubTask subTask1 = new SubTask("Подзадача 1", "Описание подзадачи 1", Status.NEW, 0, epic1.getId());
+        taskManager.createSubtask(subTask1);
+        SubTask subTask2 = new SubTask("Подзадача 2", "Описание подзадача 2", Status.NEW, 0, epic1.getId());
+        taskManager.createSubtask(subTask2);
 
-        Epic epic2 = taskManager.createEpic("Эпик 2", "Описание эпика 2", Status.NEW);
-        SubTask subTask3 = taskManager.createSubtask("Подзадача 3", "Описание подзадачи 3", Status.NEW, epic2.getId());
+        Epic epic2 = new Epic("Эпик 2", "Описание эпика 2", Status.NEW, 0);
+        taskManager.createEpic(epic2);
+        SubTask subTask3 = new SubTask("Подзадача 3", "Описание подзадачи 3", Status.NEW, 0, epic2.getId());
+        taskManager.createSubtask(subTask3);
+
 
         System.out.println("Список эпиков:");
         for (Epic epic : taskManager.getEpicList()) {

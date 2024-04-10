@@ -36,6 +36,10 @@ public class TaskManager {
         tasks.remove(id);
     }
 
+    public void removeAllTasks() {
+        tasks.clear();
+    }
+
     public void removeEpicId(int id) {
         Epic removeEpic = epics.remove(id);
         if (removeEpic != null) {
@@ -43,6 +47,11 @@ public class TaskManager {
                 subTasks.remove(subtaskId);
             }
         }
+    }
+
+    public void removeAllEpics() {
+        epics.clear();
+        subTasks.clear();
     }
 
     public void removeSubTaskId(int id) {
@@ -56,31 +65,52 @@ public class TaskManager {
         }
     }
 
-    public Task createTask(String name, String description, Status status) {
-        Task task = new Task(name, description, status, generateCounter());
+    public void removeAllSubTasks() {
+        subTasks.clear();
+        for (Epic epic : epics.values()) {
+            updateStatus(epic.getId());
+        }
+    }
+
+    public Task createTask(Task task) {
+        task.setId(generateCounter());
         tasks.put(task.getId(), task);
         return task;
     }
 
-    public Epic createEpic(String name, String description, Status status) {
-        Epic epic = new Epic(name, description, status, generateCounter());
+    public Epic createEpic(Epic epic) {
+        epic.setId(generateCounter());
         epics.put(epic.getId(), epic);
         return epic;
     }
 
-    public SubTask createSubtask(String name, String description, Status status, int epicId) {
-        Epic epic = getEpicById(epicId);
+    public SubTask createSubtask(SubTask subTask) {
+        Epic epic = getEpicById(subTask.getEpicId());
         if (epic != null) {
-            SubTask subTask = new SubTask(name, description, status, generateCounter(), epicId);
+            subTask.setId(generateCounter());
             subTasks.put(subTask.getId(), subTask);
             epic.addSubTasksIds(subTask.getId());
             if (epic.getStatus() == Status.DONE) {
                 epic.setStatus(Status.IN_PROGRESS);
-                updateStatus(epic.getId());
+                updateEpic(epic);
             }
             return subTask;
         }
         return null;
+    }
+
+
+    public void updateTask(Task task) {
+        if (tasks.containsKey(task.getId())) {
+            tasks.put(task.getId(), task);
+        }
+    }
+
+    public void updateEpic(Epic epic) {
+        if (epics.containsKey(epic.getId())) {
+            epics.put(epic.getId(), epic);
+            updateStatus(epic.getId());
+        }
     }
 
     public void updateSubTask(SubTask subTask) {
@@ -106,7 +136,7 @@ public class TaskManager {
         }
     }
 
-    public Task get(int id) {
+    public Task getTaskById(int id) {
         return tasks.get(id);
     }
 
@@ -114,22 +144,26 @@ public class TaskManager {
         return epics.get(id);
     }
 
+    public SubTask getSubtaskById(int id) {
+        return subTasks.get(id);
+    }
+
     private void updateStatus(int epicId) {
         Epic epic = epics.get(epicId);
         if (epic != null) {
-            int StatusNEW = 0;
-            int StatusDONE = 0;
+            int statusNew = 0;
+            int statusDone = 0;
             for (int subTaskId : epic.getSubTasksIds()) {
                 SubTask subTaskInEpic = subTasks.get(subTaskId);
                 if (subTaskInEpic.getStatus() == Status.NEW) {
-                    StatusNEW++;
+                    statusNew++;
                 } else if (subTaskInEpic.getStatus() == Status.DONE) {
-                    StatusDONE++;
+                    statusDone++;
                 }
             }
-            if (epic.getSubTasksIds().isEmpty() || StatusNEW == epic.getSubTasksIds().size()) {
+            if (epic.getSubTasksIds().isEmpty() || statusNew == epic.getSubTasksIds().size()) {
                 epic.setStatus(Status.NEW);
-            } else if (StatusDONE == epic.getSubTasksIds().size()) {
+            } else if (statusDone == epic.getSubTasksIds().size()) {
                 epic.setStatus(Status.DONE);
             } else {
                 epic.setStatus(Status.IN_PROGRESS);
