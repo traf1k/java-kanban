@@ -10,11 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
-    protected HashMap<Integer, Task> tasks;
-    protected HashMap<Integer, Epic> epics;
-    protected HashMap<Integer, Subtask> subTasks;
+    final protected HashMap<Integer, Task> tasks;
+    final protected HashMap<Integer, Epic> epics;
+    final protected HashMap<Integer, Subtask> subTasks;
 
-    protected HistoryManager historyManager;
+    final protected HistoryManager historyManager;
 
     private int counter = 0;
 
@@ -161,7 +161,7 @@ public class InMemoryTaskManager implements TaskManager {
         checkEpicStatus(epics.get(sbId));
     }
 
-    @Override
+
     public void checkEpicStatus(Epic epic) {
         int countNew = 0;
         int countInProgress = 0;

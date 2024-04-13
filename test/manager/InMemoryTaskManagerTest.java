@@ -14,7 +14,8 @@ import org.junit.jupiter.api.Test;
 
 class InMemoryTaskManagerTest {
 
-    static TaskManager manager;
+    TaskManager manager;
+    HistoryManager historyManager;
 
     @BeforeEach
     void creatingAndAddingTaskSubTaskEpic() {
@@ -134,5 +135,7 @@ class InMemoryTaskManagerTest {
         assertTrue(manager.getAllTasks().isEmpty(), "Ошибка при удалении всех Задач.");
         assertTrue(manager.getAllEpics().isEmpty(), "Ошибка при удалении всех Эпиков.");
         assertTrue(manager.getAllSubTasks().isEmpty(),"Ошибка при удалении всех Подзадач.");
+
     }
+    
 }
